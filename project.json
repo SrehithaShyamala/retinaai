@@ -1,0 +1,24 @@
+{
+  "overview": "RetinaAI is an AI-powered diabetic retinopathy self-screening app for patients. Log in, enter your health details, upload a fundus eye image, and instantly get a DR severity result with a visual heatmap, risk level, and plain-language guidance. View your full scan history, download PDF reports, and share results via link.",
+  "features": [
+    "Internet Identity login with private data isolation",
+    "Health profile (name, age, diabetes type, HbA1c)",
+    "Fundus image upload with AI DR classification (No DR to Proliferative)",
+    "Grad-CAM heatmap overlay with toggle and opacity control",
+    "Risk level display (Low/Moderate/High) with guidance text",
+    "Scan history dashboard",
+    "PDF report download",
+    "Shareable result links (no login required to view)"
+  ],
+  "category": "health",
+  "tags": [
+    "diabetic-retinopathy",
+    "eye-health",
+    "ai-diagnosis",
+    "patient-self-screening",
+    "medical-imaging",
+    "heatmap",
+    "pdf-report"
+  ],
+  "last_updated": "2026-04-26T08:45:45.171Z"
+}

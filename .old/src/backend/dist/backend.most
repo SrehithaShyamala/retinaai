@@ -1,0 +1,55 @@
+// Version: 1.0.0
+type ClassificationResult__211927588 =
+  {
+    confidence : Float;
+    heatmapImageUrl : Text;
+    riskLevel : RiskLevel__200299697;
+    stage : DRStage__203596137
+  };
+type DRStage__203596137 =
+  {#Mild; #Moderate; #NoRetinopathy; #Proliferative; #Severe};
+type DiabetesType__595803137 = {#Gestational; #None; #Type1; #Type2};
+type ExternalBlob__246066408 = Blob;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type PatientId__602936852 = Nat;
+type Patient__627400254 =
+  {
+    age : Nat;
+    contactInfo : Text;
+    createdAt : Timestamp__301639476;
+    diabetesType : DiabetesType__595803137;
+    hbA1c : ?Float;
+    id : PatientId__602936852;
+    name : Text;
+    principal : Principal;
+    updatedAt : Timestamp__301639476
+  };
+type RiskLevel__200299697 = {#High; #Low; #Moderate};
+type ScanId__198292568 = Nat;
+type ScanRecord__486042871 =
+  {
+    id : ScanId__198292568;
+    imageId : ExternalBlob__246066408;
+    patientId : PatientId__602936852;
+    result : ?ClassificationResult__211927588;
+    shareToken : ?Text;
+    uploadedAt : Timestamp__301639476
+  };
+type Timestamp__301639476 = Int;
+actor {
+  stable var nextPatientId : Nat;
+  stable var nextScanId : Nat;
+  stable patients :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Patient__627400254]];
+      var elementIndex : Nat__490723111
+    };
+  stable scans :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?ScanRecord__486042871]];
+      var elementIndex : Nat__490723111
+    }
+};

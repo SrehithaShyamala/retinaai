@@ -1,0 +1,147 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type UpdatePatientInput = 
+ record {
+   age: nat;
+   contactInfo: text;
+   diabetesType: DiabetesType;
+   hbA1c: opt float64;
+   name: text;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type Timestamp = int;
+type SharedScanView = 
+ record {
+   result: opt ClassificationResult;
+   scanId: ScanId;
+   uploadedAt: Timestamp;
+ };
+type ScanRecord = 
+ record {
+   id: ScanId;
+   imageId: ExternalBlob;
+   patientId: PatientId;
+   result: opt ClassificationResult;
+   shareToken: opt text;
+   uploadedAt: Timestamp;
+ };
+type ScanId = nat;
+type RiskLevel = 
+ variant {
+   High;
+   Low;
+   Moderate;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: ScanRecord;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: Patient;
+ };
+type PatientId = nat;
+type Patient = 
+ record {
+   age: nat;
+   contactInfo: text;
+   createdAt: Timestamp;
+   diabetesType: DiabetesType;
+   hbA1c: opt float64;
+   id: PatientId;
+   name: text;
+   "principal": principal;
+   updatedAt: Timestamp;
+ };
+type ExternalBlob = blob;
+type DiabetesType = 
+ variant {
+   Gestational;
+   None;
+   Type1;
+   Type2;
+ };
+type DRStage = 
+ variant {
+   Mild;
+   Moderate;
+   NoRetinopathy;
+   Proliferative;
+   Severe;
+ };
+type CreateScanInput = record {imageId: ExternalBlob;};
+type CreatePatientInput = 
+ record {
+   age: nat;
+   contactInfo: text;
+   diabetesType: DiabetesType;
+   hbA1c: opt float64;
+   name: text;
+ };
+type ClassificationResult = 
+ record {
+   confidence: float64;
+   heatmapImageUrl: text;
+   riskLevel: RiskLevel;
+   stage: DRStage;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  classifyScan: (scanId: ScanId) -> (Result_2);
+  createProfile: (input: CreatePatientInput) -> (Result);
+  createScan: (input: CreateScanInput) -> (Result_2);
+  generateShareToken: (scanId: ScanId) -> (Result_1);
+  getMyProfile: () -> (opt Patient) query;
+  getMyScans: () -> (vec ScanRecord) query;
+  getScan: (scanId: ScanId) -> (opt ScanRecord) query;
+  getSharedScan: (token: text) -> (opt SharedScanView) query;
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateProfile: (input: UpdatePatientInput) -> (Result);
+}
